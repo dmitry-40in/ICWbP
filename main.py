@@ -30,9 +30,10 @@ while True:
             body = input('Введите тело заметки:\n')
 
             dt = datetime.now()
-            date_time = "{}.{}.{} - {}:{}\n".format(dt.day, dt.month, dt.year, dt.hour, dt.minute) 
+            date = "{}.{}.{}".format(dt.day, dt.month, dt.year)
+            time = "{}:{}".format(dt.hour, dt.minute)
 
-            note = id + ';' + header + ';' + body + ';' + date_time
+            note = id + ';' + header + ';' + body + ';' + date + ';' + time + '\n'
 
         case '2':
             print('Вы выбрали 2')
@@ -41,10 +42,27 @@ while True:
 
         case '3':
             print('Вы выбрали 3')
-            with open('db.csv', 'r', encoding='utf8') as data:
-                    print('ID / Header / Body / DateTime')
-                    for i in data.readlines():
-                        print(*i.split(';'), sep = '      ',end = '')
+            
+            flag = True
+
+            while flag:
+                print('Выберите действие:\n1 - читать весь список заметок\n2 - применить фильтр по дате\n3 - выйти в основное меню\n')
+                choice_filter = input('Ваш выбор: ')
+
+                match choice_filter:
+                    case '1':
+                        with open('db.csv', 'r', encoding='utf8') as data:
+                                print('ID / Header / Body / Date / Time')
+                                for i in data.readlines():
+                                    print(*i.split(';'), sep = '      ',end = '')
+                    case '2':
+                        data_first = '30.04.2023'
+                        data_last = '1.05.2023'
+                    case '3':
+                        flag = False
+                    case _:
+                        print('Вы выбрали недопустимое значение. Повторите выбор.')
+
 
         case '4':
             print('Вы выбрали 4')
@@ -67,7 +85,8 @@ while True:
                                     note_edit[2] = input('Введите новое тело заметки: ')
                                 case '3':
                                     dt = datetime.now()
-                                    note_edit[3] = "{}.{}.{} - {}:{}\n".format(dt.day, dt.month, dt.year, dt.hour, dt.minute)
+                                    note_edit[3] = "{}.{}.{}".format(dt.day, dt.month, dt.year)
+                                    note_edit[4] = "{}:{}\n".format(dt.hour, dt.minute)
                                     list_edit.append(';'.join(note_edit))
                                     flag = False
                                 case _:
