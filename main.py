@@ -21,10 +21,18 @@ while True:
             print('Вы выбрали 1')
             try:
                 with open('db.csv', 'r', encoding='utf8') as data:
-                    list = data.readlines()
-                    last_line = list[len(list) - 1].split(';')
+                    i = data.readlines()
+                    # print('i= ', i)
+                    # print('len_i= ', len(i))
+
+                    last_line = i[len(i) - 1].split(';')
+                    # print('last_line= ', last_line)
+
                     last_id = int(last_line[0])
+                    # print('last_id= ', last_id)
+
                     id = str(last_id + 1)
+                    # print('id= ', id)
             except FileNotFoundError:
                 id = '1'
 
@@ -43,9 +51,51 @@ while True:
 
         case '3':
             print('Вы выбрали 3')
+            with open('db.csv', 'r', encoding='utf8') as data:
+                    print('ID / Header / Body / DateTime')
+                    for i in data.readlines():
+                        print(*i.split(';'), sep = '      ',end = '')
 
         case '4':
             print('Вы выбрали 4')
+            list_edit = []
+            note_edit = []
+            note_number = input('Введите ID заметки для редактирования: ')
+            flag = True
+            with open('db.csv', 'r', encoding='utf8') as data:
+                for i in data.readlines():
+                    line_i = i.split(';')
+                    if note_number == line_i[0]:
+                    #     print(i[0])
+                        note_edit = line_i.copy()
+                        print(f'Редактируем заметку ID = {note_number}')
+                        while flag:
+
+                            choice_edit = input('Выберите действие:\n1 - изменить заголовок заметки\n2 - изменить тело заметки\n3 - сохранить и выйти в основное меню\n')
+                            match choice_edit:
+                                case '1':
+                                    note_edit[1] = input('Введите новый заголовок: ')
+                                case '2':
+                                    note_edit[2] = input('Введите новое тело заметки: ')
+                                case '3':
+                                    dt = datetime.now()
+                                    note_edit[3] = "{}.{}.{} - {}:{}\n".format(dt.day, dt.month, dt.year, dt.hour, dt.minute)
+                                    print('Досвидания.')
+                                    list_edit.append(';'.join(note_edit))
+                                    flag = False
+                                case _:
+                                    print('Вы выбрали недопустимое значение. Повторите выбор.')
+
+                    else:
+                        
+                        list_edit.append(i)
+                        print('type list_edit= ', type(list_edit), ': ', list_edit)
+            with open('db.csv', 'w', encoding='utf8') as data:
+                for i in list_edit:
+                    print('type_i= ', type(i), ' ', i)
+                    data.write(i)
+
+            
 
         case '5':
             print('Вы выбрали 5')
