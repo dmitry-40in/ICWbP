@@ -56,8 +56,26 @@ while True:
                                 for i in data.readlines():
                                     print(*i.split(';'), sep = '      ',end = '')
                     case '2':
-                        data_first = '30.04.2023'
-                        data_last = '1.05.2023'
+                        # data_first = '30.04.2023'
+                        print('Введите дату в формате день.мясяц.год. Пример: 31.01.2023\n')
+                        data_first = input('Введите начала: ')
+                        data_first_obj = datetime.strptime(data_first, '%d.%m.%Y')
+
+                        # data_last = '1.05.2023'
+                        data_last = input('Введите конца: ')
+                        data_last_obj = datetime.strptime(data_last, '%d.%m.%Y')
+
+                        with open('db.csv', 'r', encoding='utf8') as data:
+                            print('ID / Header / Body / Date / Time')
+                            for i in data.readlines():
+                                line_list = i.split(';')
+                                i_data_obj = datetime.strptime(line_list[3], '%d.%m.%Y')
+                                if data_first_obj <= i_data_obj <= data_last_obj:
+                                    print(*line_list, sep = '      ',end = '')
+
+
+
+
                     case '3':
                         flag = False
                     case _:
